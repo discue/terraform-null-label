@@ -130,15 +130,10 @@ locals {
     attributes = local.id_context.attributes
   }
 
-generated_tags = {
-  for l in setintersection(keys(local.tags_context), local.labels_as_tags) :
-    case local.label_key_case {
-      "upper" => upper(l)
-      "lower" => lower(l)
-      "title" => title(lower(l))
-      default => title(lower(l))
-    } => local.tags_context[l] if length(local.tags_context[l]) > 0
-}
+  generated_tags = {
+    for l in setintersection(keys(local.tags_context), local.labels_as_tags) :
+    lower(l) => local.tags_context[l] if length(local.tags_context[l]) > 0
+  }
 
   id_context = {
     namespace   = local.namespace
